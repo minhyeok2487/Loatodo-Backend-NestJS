@@ -5,5 +5,5 @@ export class CreateCommentDto {
   body: string;
 
   @ApiProperty({ description: '상위 방명록 ID' })
-  parentId: number;
+  parentId?: number = 0;
 }
