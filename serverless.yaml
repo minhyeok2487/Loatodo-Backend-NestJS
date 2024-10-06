@@ -1,10 +1,20 @@
 service: Loatodo-Boards
 
 plugins:
-  - serverless-offline
+
+package:
+  patterns:
+    - '!.git/**'
+    - '!src/**'
+    - '!node_modules/@types/**'
+    - '!node_modules/serverless/**'
+    - '!node_modules/.cache/**'
+    - '!node_modules/aws-sdk/**'
 
 provider:
   name: aws
+  memorySize: 512
+  timeout: 900
   region: ap-northeast-2
   runtime: nodejs18.x
   stage: prod
@@ -14,26 +24,30 @@ provider:
 functions:
   api:
     handler: dist/lambda.handler
+    package:
+      patterns:
+        - '!.git/**'
+        - '!src/**'
+        - '!node_modules/@types/**'
+        - '!node_modules/serverless/**'
+        - '!node_modules/serverless-plugin-warmup/**'
+        - '!node_modules/serverless-domain-manager/**'
+        - '!node_modules/.cache/**'
+        - '!node_modules/.yarn/**'
+        - '!node_modules/aws-sdk/**'
+        - '!node_modules/@nestjs/cli/**'
+        - '!node_modules/@nestjs/test/**'
+        - '!node_modules/eslint/**'
+        - '!node_modules/jest/**'
+        - '!node_modules/ts-jest/**'
+        - '!node_modules/eslint-plugin-import-newlines/**'
+        - '!node_modules/ts-node/**'
+        - '!node_modules/source-map-support/**'
+        - '!node_modules/typescript/**'
     events:
       - http:
-          method: any
-          path: /{proxy+}
+          path: /
+          method: ANY
       - http:
-          method: get
-          path: /api-docs
-          cors: true
-    package:
-      exclude:
-        - node_modules/**
-        - src/**
-        - tests/**
-        - .git/**
-        - .gitignore
-        - serverless.yaml
-        - README.md
-        - package.json
-        - package-lock.json
-
-custom:
-  optimize:
-    external: ['swagger-ui-dist']
+          path: /{proxy+}
+          method: ANY

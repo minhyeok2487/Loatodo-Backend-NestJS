@@ -17,7 +17,7 @@ export class CommentsService {
     size: number = 5,
   ): Promise<PagingDto<ResponseCommentDto[]>> {
     const parentComments: Comments[] =
-      await this.commentsRepository.getCommentsByParentId('0', page, size);
+      await this.commentsRepository.getCommentsByParentId(0, page, size);
     const totalPages: number = await this.commentsRepository.count();
 
     // 각 부모 댓글에 대한 답글도 함께 가져옴
@@ -35,7 +35,7 @@ export class CommentsService {
     comment: Comments,
   ): Promise<ResponseCommentDto[]> {
     const replies: Comments[] =
-      await this.commentsRepository.getCommentsByParentId(comment.id);
+      await this.commentsRepository.getCommentsByParentId(Number(comment.id));
     const commentDto: ResponseCommentDto =
       ResponseCommentDto.createResponseDto(comment);
     const replyDtos: ResponseCommentDto[] = replies.map(
@@ -51,7 +51,7 @@ export class CommentsService {
     const comment: Comments = this.commentsRepository.create({
       body: createCommentDto.body,
       member: member,
-      parentId: createCommentDto.parentId.toString(),
+      parentId: String(createCommentDto.parentId),
     });
     await this.commentsRepository.save(comment);
   }
@@ -68,17 +68,17 @@ export class CommentsService {
     await this.commentsRepository.save(comment);
   }
 
-  async delete(id: string, member: Member): Promise<void> {
+  async delete(id: number, member: Member): Promise<void> {
     const comment = await this.findCommentAndCheckPermission(id, member);
     await this.commentsRepository.remove(comment);
   }
 
   private async findCommentAndCheckPermission(
-    id: string,
+    id: number,
     member: Member,
   ): Promise<Comments> {
     const comment: Comments | null = await this.commentsRepository.findOne({
-      where: { id },
+      where: { id:id.toString() },
       relations: ['Member'],
     });
 

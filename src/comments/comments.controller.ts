@@ -78,7 +78,7 @@ export class CommentsController {
   @Delete('/:id')
   @ApiOperation({ summary: '방명록 삭제' })
   @UseGuards(AuthGuard('jwt'))
-  delete(@GetMember() member: Member, @Param('id') id: string): Promise<void> {
+  delete(@GetMember() member: Member, @Param('id') id: number): Promise<void> {
     return this.commentsService.delete(id, member);
   }
 }

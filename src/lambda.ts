@@ -9,6 +9,7 @@ let server: Handler;
 
 async function bootstrap(): Promise<Handler> {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('로아투두 게시판 API')
     .setDescription('공지사항, 방명록, 게시판 등')

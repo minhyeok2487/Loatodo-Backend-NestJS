@@ -4,16 +4,16 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ResponseCommentDto {
   @ApiProperty({ description: '방명록 ID' })
-  id: string;
+  id: number;
 
   @ApiProperty({ description: '방명록 내용' })
   body: string;
 
   @ApiProperty({ description: '상위 방명록 ID (없으면 0)' })
-  parentId: string;
+  parentId: number;
 
   @ApiProperty({ description: '작성자 ID' })
-  memberId: string;
+  memberId: number;
 
   @ApiProperty({ description: '작성자 이름' })
   username: string;
@@ -30,10 +30,10 @@ export class ResponseCommentDto {
 
   static createResponseDto(comment: Comments): ResponseCommentDto {
     const responseDto = new ResponseCommentDto();
-    responseDto.id = comment.id;
+    responseDto.id = Number(comment.id);
     responseDto.body = comment.body;
-    responseDto.parentId = comment.parentId;
-    responseDto.memberId = comment.member.id;
+    responseDto.parentId = Number(comment.parentId); // Convert to number
+    responseDto.memberId = Number(comment.member.id);
     responseDto.username = comment.member.username;
     responseDto.role = comment.member.role;
     responseDto.regDate = comment.createdDate;

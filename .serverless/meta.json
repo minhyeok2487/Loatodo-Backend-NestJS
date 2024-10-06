@@ -13,11 +13,24 @@
     "serviceConfigFileName": "serverless.yaml",
     "service": {
       "service": "Loatodo-Boards",
-      "plugins": [
-        "serverless-offline"
-      ],
+      "package": {
+        "patterns": [
+          "!.git/**",
+          "!src/**",
+          "!node_modules/@types/**",
+          "!node_modules/serverless/**",
+          "!node_modules/.cache/**",
+          "!node_modules/aws-sdk/**"
+        ],
+        "artifactsS3KeyDirname": "serverless/Loatodo-Boards/prod/code-artifacts",
+        "deploymentBucket": "serverless-framework-deployments-ap-northeast-2-b20fea30-80e4",
+        "artifact": "/Users/minhyeok/Desktop/LostarkTodo/nestjs/boards/.serverless/Loatodo-Boards.zip",
+        "artifactDirectoryName": "serverless/Loatodo-Boards/prod/1728229299875-2024-10-06T15:41:39.875Z"
+      },
       "provider": {
         "name": "aws",
+        "memorySize": 512,
+        "timeout": 900,
         "region": "ap-northeast-2",
         "runtime": "nodejs18.x",
         "stage": "prod",
@@ -118,13 +131,13 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-ap-northeast-2-b20fea30-80e4",
-                  "S3Key": "serverless/Loatodo-Boards/prod/1728221280151-2024-10-06T13:28:00.151Z/Loatodo-Boards.zip"
+                  "S3Key": "serverless/Loatodo-Boards/prod/1728229299875-2024-10-06T15:41:39.875Z/Loatodo-Boards.zip"
                 },
                 "Handler": "dist/lambda.handler",
                 "Runtime": "nodejs18.x",
                 "FunctionName": "Loatodo-Boards-prod-api",
-                "MemorySize": 1024,
-                "Timeout": 6,
+                "MemorySize": 512,
+                "Timeout": 900,
                 "Environment": {
                   "Variables": {
                     "NODE_ENV": "production"
@@ -141,14 +154,14 @@
                 "ApiLogGroup"
               ]
             },
-            "ApiLambdaVersionUFpo9gDrUfBBneMq53aHCKjMXiMQ2Az9uHzVgjvQ": {
+            "ApiLambdaVersionNd9F6UmVxV6MahIT5DHQUVjQWZGtVKGej6BFc3IGTyE": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "ApiLambdaFunction"
                 },
-                "CodeSha256": "Hx5yy+DlmqOOGt1NxPO3vZ+zva/LGonvk2A1HYeSIcA="
+                "CodeSha256": "Rc311E644561x2lP5ZOElBlavNn/tRv/dawCPv1vJ/U="
               }
             },
             "ApiGatewayRestApi": {
@@ -178,65 +191,54 @@
                 }
               }
             },
-            "ApiGatewayResourceApiDashdocs": {
-              "Type": "AWS::ApiGateway::Resource",
+            "ApiGatewayMethodAny": {
+              "Type": "AWS::ApiGateway::Method",
               "Properties": {
-                "ParentId": {
+                "HttpMethod": "ANY",
+                "RequestParameters": {},
+                "ResourceId": {
                   "Fn::GetAtt": [
                     "ApiGatewayRestApi",
                     "RootResourceId"
                   ]
                 },
-                "PathPart": "api-docs",
                 "RestApiId": {
                   "Ref": "ApiGatewayRestApi"
-                }
-              }
-            },
-            "ApiGatewayMethodApiDashdocsOptions": {
-              "Type": "AWS::ApiGateway::Method",
-              "Properties": {
+                },
+                "ApiKeyRequired": "<REDACTED>",
                 "AuthorizationType": "NONE",
-                "HttpMethod": "OPTIONS",
-                "MethodResponses": [
-                  {
-                    "StatusCode": "200",
-                    "ResponseParameters": {
-                      "method.response.header.Access-Control-Allow-Origin": true,
-                      "method.response.header.Access-Control-Allow-Headers": true,
-                      "method.response.header.Access-Control-Allow-Methods": true
-                    },
-                    "ResponseModels": {}
-                  }
-                ],
-                "RequestParameters": {},
                 "Integration": {
-                  "Type": "MOCK",
-                  "RequestTemplates": {
-                    "application/json": "{statusCode:200}"
-                  },
-                  "ContentHandling": "CONVERT_TO_TEXT",
-                  "IntegrationResponses": [
-                    {
-                      "StatusCode": "200",
-                      "ResponseParameters": {
-                        "method.response.header.Access-Control-Allow-Origin": "'*'",
-                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
-                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
-                      },
-                      "ResponseTemplates": {
-                        "application/json": ""
-                      }
-                    }
-                  ]
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "ApiLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
                 },
-                "ResourceId": {
-                  "Ref": "ApiGatewayResourceApiDashdocs"
-                },
-                "RestApiId": {
-                  "Ref": "ApiGatewayRestApi"
-                }
-              }
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "ApiLambdaPermissionApiGateway"
+              ]
             },
             "ApiGatewayMethodProxyVarAny": {
               "Type": "AWS::ApiGateway::Method",
@@ -284,53 +286,7 @@
                 "ApiLambdaPermissionApiGateway"
               ]
             },
-            "ApiGatewayMethodApiDashdocsGet": {
-              "Type": "AWS::ApiGateway::Method",
-              "Properties": {
-                "HttpMethod": "GET",
-                "RequestParameters": {},
-                "ResourceId": {
-                  "Ref": "ApiGatewayResourceApiDashdocs"
-                },
-                "RestApiId": {
-                  "Ref": "ApiGatewayRestApi"
-                },
-                "ApiKeyRequired": "<REDACTED>",
-                "AuthorizationType": "NONE",
-                "Integration": {
-                  "IntegrationHttpMethod": "POST",
-                  "Type": "AWS_PROXY",
-                  "Uri": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:",
-                        {
-                          "Ref": "AWS::Partition"
-                        },
-                        ":apigateway:",
-                        {
-                          "Ref": "AWS::Region"
-                        },
-                        ":lambda:path/2015-03-31/functions/",
-                        {
-                          "Fn::GetAtt": [
-                            "ApiLambdaFunction",
-                            "Arn"
-                          ]
-                        },
-                        "/invocations"
-                      ]
-                    ]
-                  }
-                },
-                "MethodResponses": []
-              },
-              "DependsOn": [
-                "ApiLambdaPermissionApiGateway"
-              ]
-            },
-            "ApiGatewayDeployment1728221273883": {
+            "ApiGatewayDeployment1728229295626": {
               "Type": "AWS::ApiGateway::Deployment",
               "Properties": {
                 "RestApiId": {
@@ -339,9 +295,8 @@
                 "StageName": "prod"
               },
               "DependsOn": [
-                "ApiGatewayMethodApiDashdocsOptions",
-                "ApiGatewayMethodProxyVarAny",
-                "ApiGatewayMethodApiDashdocsGet"
+                "ApiGatewayMethodAny",
+                "ApiGatewayMethodProxyVarAny"
               ]
             },
             "ApiLambdaPermissionApiGateway": {
@@ -392,7 +347,7 @@
             "ApiLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "ApiLambdaVersionUFpo9gDrUfBBneMq53aHCKjMXiMQ2Az9uHzVgjvQ"
+                "Ref": "ApiLambdaVersionNd9F6UmVxV6MahIT5DHQUVjQWZGtVKGej6BFc3IGTyE"
               },
               "Export": {
                 "Name": "sls-Loatodo-Boards-prod-ApiLambdaFunctionQualifiedArn"
@@ -431,80 +386,62 @@
       "functions": {
         "api": {
           "handler": "dist/lambda.handler",
+          "package": {
+            "patterns": [
+              "!.git/**",
+              "!src/**",
+              "!node_modules/@types/**",
+              "!node_modules/serverless/**",
+              "!node_modules/serverless-plugin-warmup/**",
+              "!node_modules/serverless-domain-manager/**",
+              "!node_modules/.cache/**",
+              "!node_modules/.yarn/**",
+              "!node_modules/aws-sdk/**",
+              "!node_modules/@nestjs/cli/**",
+              "!node_modules/@nestjs/test/**",
+              "!node_modules/eslint/**",
+              "!node_modules/jest/**",
+              "!node_modules/ts-jest/**",
+              "!node_modules/eslint-plugin-import-newlines/**",
+              "!node_modules/ts-node/**",
+              "!node_modules/source-map-support/**",
+              "!node_modules/typescript/**"
+            ]
+          },
           "events": [
             {
               "http": {
+                "path": "",
                 "method": "any",
-                "path": "{proxy+}",
                 "integration": "AWS_PROXY"
               }
             },
             {
               "http": {
-                "method": "get",
-                "path": "api-docs",
-                "cors": {
-                  "origin": "*",
-                  "methods": [
-                    "OPTIONS",
-                    "GET"
-                  ],
-                  "headers": [
-                    "Content-Type",
-                    "X-Amz-Date",
-                    "Authorization",
-                    "X-Api-Key",
-                    "X-Amz-Security-Token",
-                    "X-Amz-User-Agent",
-                    "X-Amzn-Trace-Id"
-                  ],
-                  "allowCredentials": "<REDACTED>"
-                },
+                "path": "{proxy+}",
+                "method": "any",
                 "integration": "AWS_PROXY"
               }
             }
           ],
-          "package": {
-            "exclude": [
-              "node_modules/**",
-              "src/**",
-              "tests/**",
-              ".git/**",
-              ".gitignore",
-              "serverless.yaml",
-              "README.md",
-              "package.json",
-              "package-lock.json"
-            ]
-          },
           "name": "Loatodo-Boards-prod-api",
-          "memory": 1024,
-          "timeout": 6,
+          "memory": 512,
+          "timeout": 900,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "ApiLambdaVersionUFpo9gDrUfBBneMq53aHCKjMXiMQ2Az9uHzVgjvQ"
+          "versionLogicalId": "ApiLambdaVersionNd9F6UmVxV6MahIT5DHQUVjQWZGtVKGej6BFc3IGTyE"
         }
       },
-      "custom": {
-        "optimize": {
-          "external": [
-            "swagger-ui-dist"
-          ]
-        }
-      }
+      "plugins": null
     },
-    "serviceRawFile": "service: Loatodo-Boards\n\nplugins:\n  - serverless-offline\n\nprovider:\n  name: aws\n  region: ap-northeast-2\n  runtime: nodejs18.x\n  stage: prod\n  environment:\n    NODE_ENV: production\n\nfunctions:\n  api:\n    handler: dist/lambda.handler\n    events:\n      - http:\n          method: any\n          path: /{proxy+}\n      - http:\n          method: get\n          path: /api-docs\n          cors: true\n    package:\n      exclude:\n        - node_modules/**\n        - src/**\n        - tests/**\n        - .git/**\n        - .gitignore\n        - serverless.yaml\n        - README.md\n        - package.json\n        - package-lock.json\n\ncustom:\n  optimize:\n    external: ['swagger-ui-dist']\n",
+    "serviceRawFile": "service: Loatodo-Boards\n\nplugins:\n\npackage:\n  patterns:\n    - '!.git/**'\n    - '!src/**'\n    - '!node_modules/@types/**'\n    - '!node_modules/serverless/**'\n    - '!node_modules/.cache/**'\n    - '!node_modules/aws-sdk/**'\n\nprovider:\n  name: aws\n  memorySize: 512\n  timeout: 900\n  region: ap-northeast-2\n  runtime: nodejs18.x\n  stage: prod\n  environment:\n    NODE_ENV: production\n\nfunctions:\n  api:\n    handler: dist/lambda.handler\n    package:\n      patterns:\n        - '!.git/**'\n        - '!src/**'\n        - '!node_modules/@types/**'\n        - '!node_modules/serverless/**'\n        - '!node_modules/serverless-plugin-warmup/**'\n        - '!node_modules/serverless-domain-manager/**'\n        - '!node_modules/.cache/**'\n        - '!node_modules/.yarn/**'\n        - '!node_modules/aws-sdk/**'\n        - '!node_modules/@nestjs/cli/**'\n        - '!node_modules/@nestjs/test/**'\n        - '!node_modules/eslint/**'\n        - '!node_modules/jest/**'\n        - '!node_modules/ts-jest/**'\n        - '!node_modules/eslint-plugin-import-newlines/**'\n        - '!node_modules/ts-node/**'\n        - '!node_modules/source-map-support/**'\n        - '!node_modules/typescript/**'\n    events:\n      - http:\n          path: /\n          method: ANY\n      - http:\n          path: /{proxy+}\n          method: ANY\n",
     "command": [
       "deploy"
     ],
     "options": {},
-    "error": {
-      "message": "An error occurred: ApiLambdaFunction - Resource handler returned message: \"Unzipped size must be smaller than 262144000 bytes (Service: Lambda, Status Code: 400, Request ID: 385fbf68-6a5a-43a1-990d-d215d5863415)\" (RequestToken: 93930b18-5e11-286a-56a7-a5ceba33eb5e, HandlerErrorCode: InvalidRequest).",
-      "stack": "ServerlessError2: An error occurred: ApiLambdaFunction - Resource handler returned message: \"Unzipped size must be smaller than 262144000 bytes (Service: Lambda, Status Code: 400, Request ID: 385fbf68-6a5a-43a1-990d-d215d5863415)\" (RequestToken: 93930b18-5e11-286a-56a7-a5ceba33eb5e, HandlerErrorCode: InvalidRequest).\n    at file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:717:832\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async AwsDeploy.update (file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:717:25367)\n    at async aws:deploy:deploy:updateStack (file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:728:5729)\n    at async PluginManager.runHooks (file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:915:9311)\n    at async PluginManager.invoke (file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:915:10082)\n    at async PluginManager.spawn (file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:915:10443)\n    at async PluginManager.runHooks (file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:915:9311)\n    at async PluginManager.invoke (file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:915:10082)\n    at async PluginManager.run (file:///Users/minhyeok/.serverless/releases/4.4.4/package/dist/sf-core.js:915:10813)",
-      "code": "AWS_CLOUD_FORMATION_UPDATE_STACK_INTERNAL_LAMBDA_FUNCTION_UPDATE_FAILED"
-    },
+    "error": null,
     "params": {},
-    "machineId": "1e1d00c5962014e2dd6aa6fe4e56d3e5",
+    "machineId": "c83cf54ac2e3fe3fdacbd81a9c83129a",
     "stage": "prod",
     "accessKeyV2": "<REDACTED>",
     "accessKeyV1": "<REDACTED>",
@@ -529,11 +466,30 @@
     "projectType": "traditional",
     "versionSf": "4.4.4",
     "serviceProviderAwsCfStackName": "Loatodo-Boards-prod",
+    "integrations": {},
     "serviceUniqueId": "arn:aws:cloudformation:ap-northeast-2:173796993047:stack/Loatodo-Boards-prod/8820f940-831c-11ef-800c-02216f137587",
     "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-northeast-2:173796993047:stack/Loatodo-Boards-prod/8820f940-831c-11ef-800c-02216f137587",
     "serviceProviderAwsCfStackCreated": "2024-10-05T13:20:03.901Z",
-    "serviceProviderAwsCfStackUpdated": "2024-10-06T13:28:09.992Z",
-    "serviceProviderAwsCfStackStatus": "UPDATE_ROLLBACK_IN_PROGRESS",
-    "serviceProviderAwsCfStackOutputs": null
+    "serviceProviderAwsCfStackUpdated": "2024-10-06T15:41:44.817Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "ApiLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:ap-northeast-2:173796993047:function:Loatodo-Boards-prod-api:12",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-Loatodo-Boards-prod-ApiLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://ehah5ykuc9.execute-api.ap-northeast-2.amazonaws.com/prod",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-Loatodo-Boards-prod-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-ap-northeast-2-b20fea30-80e4",
+        "ExportName": "sls-Loatodo-Boards-prod-ServerlessDeploymentBucketName"
+      }
+    ]
   }
 }
