@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -56,6 +57,7 @@ export class CommentsController {
   }
 
   @Post()
+  @HttpCode(200)
   @ApiOperation({ summary: '방명록 저장' })
   @UseGuards(AuthGuard('jwt'))
   create(

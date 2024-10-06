@@ -25,7 +25,7 @@
         "artifactsS3KeyDirname": "serverless/Loatodo-Backend-NestJS/prod/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-ap-northeast-2-b20fea30-80e4",
         "artifact": "/Users/minhyeok/Desktop/LostarkTodo/Backend-NestJS/.serverless/Loatodo-Backend-NestJS.zip",
-        "artifactDirectoryName": "serverless/Loatodo-Backend-NestJS/prod/1728253638762-2024-10-06T22:27:18.762Z"
+        "artifactDirectoryName": "serverless/Loatodo-Backend-NestJS/prod/1728255499227-2024-10-06T22:58:19.227Z"
       },
       "provider": {
         "name": "aws",
@@ -131,7 +131,7 @@
               "Properties": {
                 "Code": {
                   "S3Bucket": "serverless-framework-deployments-ap-northeast-2-b20fea30-80e4",
-                  "S3Key": "serverless/Loatodo-Backend-NestJS/prod/1728253638762-2024-10-06T22:27:18.762Z/Loatodo-Backend-NestJS.zip"
+                  "S3Key": "serverless/Loatodo-Backend-NestJS/prod/1728255499227-2024-10-06T22:58:19.227Z/Loatodo-Backend-NestJS.zip"
                 },
                 "Handler": "dist/lambda.handler",
                 "Runtime": "nodejs18.x",
@@ -154,14 +154,14 @@
                 "ApiLogGroup"
               ]
             },
-            "ApiLambdaVersionzKTRQd4mxnMMXCPgMpHS4Iz1noosXx1Vkpkhsj2Rk": {
+            "ApiLambdaVersion2aL29OHFHtXIFV12UTEzzXJzRV8CbQmSfKg0cltMn4": {
               "Type": "AWS::Lambda::Version",
               "DeletionPolicy": "Retain",
               "Properties": {
                 "FunctionName": {
                   "Ref": "ApiLambdaFunction"
                 },
-                "CodeSha256": "rK+ovVnMR/o5jLDmVuk+sv4UBwh1DOO95+3lnfn+6h8="
+                "CodeSha256": "157KOR8BuGfjE1jB3mFAz4jBU74xOF/4nppGlK6g3yE="
               }
             },
             "ApiGatewayRestApi": {
@@ -286,7 +286,7 @@
                 "ApiLambdaPermissionApiGateway"
               ]
             },
-            "ApiGatewayDeployment1728253634193": {
+            "ApiGatewayDeployment1728255494220": {
               "Type": "AWS::ApiGateway::Deployment",
               "Properties": {
                 "RestApiId": {
@@ -347,7 +347,7 @@
             "ApiLambdaFunctionQualifiedArn": {
               "Description": "Current Lambda function version",
               "Value": {
-                "Ref": "ApiLambdaVersionzKTRQd4mxnMMXCPgMpHS4Iz1noosXx1Vkpkhsj2Rk"
+                "Ref": "ApiLambdaVersion2aL29OHFHtXIFV12UTEzzXJzRV8CbQmSfKg0cltMn4"
               },
               "Export": {
                 "Name": "sls-Loatodo-Backend-NestJS-prod-ApiLambdaFunctionQualifiedArn"
@@ -429,7 +429,7 @@
           "timeout": 900,
           "runtime": "nodejs18.x",
           "vpc": {},
-          "versionLogicalId": "ApiLambdaVersionzKTRQd4mxnMMXCPgMpHS4Iz1noosXx1Vkpkhsj2Rk"
+          "versionLogicalId": "ApiLambdaVersion2aL29OHFHtXIFV12UTEzzXJzRV8CbQmSfKg0cltMn4"
         }
       },
       "plugins": null
@@ -470,12 +470,12 @@
     "serviceUniqueId": "arn:aws:cloudformation:ap-northeast-2:173796993047:stack/Loatodo-Backend-NestJS-prod/28ba6470-8432-11ef-b8d1-06f1629d24cd",
     "serviceProviderAwsCfStackId": "arn:aws:cloudformation:ap-northeast-2:173796993047:stack/Loatodo-Backend-NestJS-prod/28ba6470-8432-11ef-b8d1-06f1629d24cd",
     "serviceProviderAwsCfStackCreated": "2024-10-06T22:27:23.939Z",
-    "serviceProviderAwsCfStackUpdated": null,
-    "serviceProviderAwsCfStackStatus": "CREATE_COMPLETE",
+    "serviceProviderAwsCfStackUpdated": "2024-10-06T22:58:23.958Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
     "serviceProviderAwsCfStackOutputs": [
       {
         "OutputKey": "ApiLambdaFunctionQualifiedArn",
-        "OutputValue": "arn:aws:lambda:ap-northeast-2:173796993047:function:Loatodo-Backend-NestJS-prod-api:1",
+        "OutputValue": "arn:aws:lambda:ap-northeast-2:173796993047:function:Loatodo-Backend-NestJS-prod-api:2",
         "Description": "Current Lambda function version",
         "ExportName": "sls-Loatodo-Backend-NestJS-prod-ApiLambdaFunctionQualifiedArn"
       },
