@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import { ResponseCommentDto } from './dto/response-comment.dto';
+import { ResponseCommentDto } from './dtos/response-comment.dto';
 import { PagingDto } from 'src/paging.dto';
 import {
   ApiExtraModels,
@@ -19,11 +19,11 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { GetMember } from 'src/member/get-Member.decorator';
-import { Member } from 'src/member/entities/member.entity';
+import { CreateCommentDto } from './dtos/create-comment.dto';
+import { GetMember } from 'src/domain/member/get-member.decorator';
+import { Member } from 'src/domain/member/entities/member.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { UpdateCommentDto } from './dtos/update-comment.dto';
 
 @Controller('comments')
 @ApiTags('comments')

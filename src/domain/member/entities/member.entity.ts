@@ -1,4 +1,5 @@
-import { Comments } from 'src/comments/entities/comments.entity';
+import { Comments } from 'src/domain/comments/comments.entity';
+import { Notification } from 'src/domain/notification/notification.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -29,6 +30,9 @@ export class Member {
 
   @OneToMany(() => Comments, (comments) => comments.member, { eager: false })
   comments: Comments[];
+
+  @OneToMany(() => Notification, (notification) => notification.receiver, { eager: false })
+  notifications: Notification[];
 }
 
 export enum Role {

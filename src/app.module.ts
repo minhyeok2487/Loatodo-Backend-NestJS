@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CommentsModule } from './comments/comments.module';
-import { MemberModule } from './member/member.module';
+import { MemberModule } from './domain/member/member.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { NotificationModule } from './domain/notification/notification.module';
 import * as path from 'path';
+import { CommentsModule } from './domain/comments/comments.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import * as path from 'path';
     }),
     CommentsModule,
     MemberModule,
+    NotificationModule,
   ],
   controllers: [],
 })

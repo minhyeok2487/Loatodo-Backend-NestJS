@@ -1,16 +1,15 @@
-import { Member } from 'src/member/entities/member.entity';
+import { BaseTimeEntity } from 'src/global/basetime.entity';
+import { Member } from 'src/domain/member/entities/member.entity';
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class Comments {
+export class Comments extends BaseTimeEntity {
   @PrimaryGeneratedColumn({ name: 'comments_id', type: 'bigint' })
   id: string;
 
@@ -23,19 +22,4 @@ export class Comments {
 
   @Column({ name: 'parent_id', type: 'bigint' })
   parentId: string;
-
-  @CreateDateColumn({
-    name: 'created_date',
-    type: 'datetime',
-    precision: 6,
-    update: false,
-  })
-  createdDate: Date;
-
-  @UpdateDateColumn({
-    name: 'last_modified_date',
-    type: 'datetime',
-    precision: 6,
-  })
-  lastModifiedDate: Date;
 }

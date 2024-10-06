@@ -1,5 +1,5 @@
-import { Role } from 'src/member/entities/member.entity';
-import { Comments } from '../entities/comments.entity';
+import { Role } from 'src/domain/member/entities/member.entity';
+import { Comments } from '../comments.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ResponseCommentDto {

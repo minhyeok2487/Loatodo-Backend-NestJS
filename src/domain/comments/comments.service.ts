@@ -1,15 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { Comments } from './entities/comments.entity';
-import { ResponseCommentDto } from './dto/response-comment.dto';
+import { Comments } from './comments.entity';
+import { ResponseCommentDto } from './dtos/response-comment.dto';
 import { PagingDto } from 'src/paging.dto';
 import { CommentsRepository } from './comments.repository';
+import { CreateCommentDto } from './dtos/create-comment.dto';
+import { UpdateCommentDto } from './dtos/update-comment.dto';
 import { Member } from '../member/entities/member.entity';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { NotificationRepository } from '../notification/notification.repository';
+import {
+  Notification,
+  NotificationType,
+} from '../notification/notification.entity';
 
 @Injectable()
 export class CommentsService {
-  constructor(private readonly commentsRepository: CommentsRepository) {}
+  constructor(
+    private readonly commentsRepository: CommentsRepository,
+    private readonly notificationRepository: NotificationRepository,
+  ) {}
 
   // 전체 댓글과 답글을 가져오는 메서드
   async findAll(
@@ -54,6 +62,17 @@ export class CommentsService {
       parentId: String(createCommentDto.parentId),
     });
     await this.commentsRepository.save(comment);
+
+    if (createCommentDto.parentId != 0) {
+      const notification: Notification = this.notificationRepository.create({
+        content: '내가 쓴 방명록에 댓글이 달렸어요.',
+        notificationType: NotificationType.COMMENT,
+        isRead: false,
+        commentId: createCommentDto.parentId.toString(),
+        receiver: member,
+      });
+      await this.notificationRepository.save(notification);
+    }
   }
 
   async update(
@@ -78,7 +97,7 @@ export class CommentsService {
     member: Member,
   ): Promise<Comments> {
     const comment: Comments | null = await this.commentsRepository.findOne({
-      where: { id:id.toString() },
+      where: { id: id.toString() },
       relations: ['Member'],
     });
 

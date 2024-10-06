@@ -1,4 +1,4 @@
-service: Loatodo-Boards
+service: Loatodo-Backend-NestJS
 
 plugins:
 
