@@ -1,6 +1,7 @@
 service: Loatodo-Boards
 
 plugins:
+  - serverless-offline
 
 provider:
   name: aws
@@ -17,4 +18,22 @@ functions:
       - http:
           method: any
           path: /{proxy+}
-          
+      - http:
+          method: get
+          path: /api-docs
+          cors: true
+    package:
+      exclude:
+        - node_modules/**
+        - src/**
+        - tests/**
+        - .git/**
+        - .gitignore
+        - serverless.yaml
+        - README.md
+        - package.json
+        - package-lock.json
+
+custom:
+  optimize:
+    external: ['swagger-ui-dist']

@@ -10,7 +10,7 @@ export class CommentsRepository extends Repository<Comments> {
 
   // 부모 ID로 댓글을 가져오는 함수 (페이지네이션 가능)
   async getCommentsByParentId(
-    parentId: bigint,
+    parentId: string,
     page?: number,
     size?: number,
   ): Promise<Comments[]> {

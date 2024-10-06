@@ -5,6 +5,7 @@ import { PagingDto } from 'src/paging.dto';
 import { CommentsRepository } from './comments.repository';
 import { Member } from '../member/entities/member.entity';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentsService {
@@ -16,7 +17,7 @@ export class CommentsService {
     size: number = 5,
   ): Promise<PagingDto<ResponseCommentDto[]>> {
     const parentComments: Comments[] =
-      await this.commentsRepository.getCommentsByParentId(0n, page, size);
+      await this.commentsRepository.getCommentsByParentId('0', page, size);
     const totalPages: number = await this.commentsRepository.count();
 
     // 각 부모 댓글에 대한 답글도 함께 가져옴
@@ -34,7 +35,7 @@ export class CommentsService {
     comment: Comments,
   ): Promise<ResponseCommentDto[]> {
     const replies: Comments[] =
-      await this.commentsRepository.getCommentsByParentId(BigInt(comment.id));
+      await this.commentsRepository.getCommentsByParentId(comment.id);
     const commentDto: ResponseCommentDto =
       ResponseCommentDto.createResponseDto(comment);
     const replyDtos: ResponseCommentDto[] = replies.map(
@@ -53,5 +54,42 @@ export class CommentsService {
       parentId: createCommentDto.parentId.toString(),
     });
     await this.commentsRepository.save(comment);
+  }
+
+  async update(
+    updateCommentDto: UpdateCommentDto,
+    member: Member,
+  ): Promise<void> {
+    const comment = await this.findCommentAndCheckPermission(
+      updateCommentDto.id,
+      member,
+    );
+    comment.body = updateCommentDto.body;
+    await this.commentsRepository.save(comment);
+  }
+
+  async delete(id: string, member: Member): Promise<void> {
+    const comment = await this.findCommentAndCheckPermission(id, member);
+    await this.commentsRepository.remove(comment);
+  }
+
+  private async findCommentAndCheckPermission(
+    id: string,
+    member: Member,
+  ): Promise<Comments> {
+    const comment: Comments | null = await this.commentsRepository.findOne({
+      where: { id },
+      relations: ['Member'],
+    });
+
+    if (!comment) {
+      throw new Error('데이터를 찾을 수 없습니다.');
+    }
+
+    if (comment.member.id !== member.id) {
+      throw new Error('권한이 없습니다.');
+    }
+
+    return comment;
   }
 }

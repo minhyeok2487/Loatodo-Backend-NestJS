@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { ResponseCommentDto } from './dto/response-comment.dto';
 import { PagingDto } from 'src/paging.dto';
@@ -13,6 +23,7 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { GetMember } from 'src/member/get-Member.decorator';
 import { Member } from 'src/member/entities/member.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Controller('comments')
 @ApiTags('comments')
@@ -52,5 +63,22 @@ export class CommentsController {
     @Body() createCommentDto: CreateCommentDto,
   ): Promise<void> {
     return this.commentsService.create(createCommentDto, member);
+  }
+
+  @Patch()
+  @ApiOperation({ summary: '방명록 수정' })
+  @UseGuards(AuthGuard('jwt'))
+  update(
+    @GetMember() member: Member,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ): Promise<void> {
+    return this.commentsService.update(updateCommentDto, member);
+  }
+
+  @Delete('/:id')
+  @ApiOperation({ summary: '방명록 삭제' })
+  @UseGuards(AuthGuard('jwt'))
+  delete(@GetMember() member: Member, @Param('id') id: string): Promise<void> {
+    return this.commentsService.delete(id, member);
   }
 }
