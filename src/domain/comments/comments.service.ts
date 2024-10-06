@@ -98,7 +98,7 @@ export class CommentsService {
   ): Promise<Comments> {
     const comment: Comments | null = await this.commentsRepository.findOne({
       where: { id: id.toString() },
-      relations: ['Member'],
+      relations: ['member'],
     });
 
     if (!comment) {

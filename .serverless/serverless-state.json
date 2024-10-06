@@ -1,8 +1,8 @@
 {
   "service": {
-    "service": "Loatodo-Boards",
+    "service": "Loatodo-Backend-NestJS",
     "serviceObject": {
-      "name": "Loatodo-Boards"
+      "name": "Loatodo-Backend-NestJS"
     },
     "provider": {
       "name": "aws",
@@ -22,7 +22,7 @@
           "ApiLogGroup": {
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "/aws/lambda/Loatodo-Boards-prod-api"
+              "LogGroupName": "/aws/lambda/Loatodo-Backend-NestJS-prod-api"
             }
           },
           "IamRoleLambdaExecution": {
@@ -50,7 +50,7 @@
                     "Fn::Join": [
                       "-",
                       [
-                        "Loatodo-Boards",
+                        "Loatodo-Backend-NestJS",
                         "prod",
                         "lambda"
                       ]
@@ -68,7 +68,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/Loatodo-Boards-prod*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/Loatodo-Backend-NestJS-prod*:*"
                           }
                         ]
                       },
@@ -79,7 +79,7 @@
                         ],
                         "Resource": [
                           {
-                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/Loatodo-Boards-prod*:*:*"
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/Loatodo-Backend-NestJS-prod*:*:*"
                           }
                         ]
                       }
@@ -92,7 +92,7 @@
                 "Fn::Join": [
                   "-",
                   [
-                    "Loatodo-Boards",
+                    "Loatodo-Backend-NestJS",
                     "prod",
                     {
                       "Ref": "AWS::Region"
@@ -108,11 +108,11 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-ap-northeast-2-b20fea30-80e4",
-                "S3Key": "serverless/Loatodo-Boards/prod/1728229299875-2024-10-06T15:41:39.875Z/Loatodo-Boards.zip"
+                "S3Key": "serverless/Loatodo-Backend-NestJS/prod/1728253638762-2024-10-06T22:27:18.762Z/Loatodo-Backend-NestJS.zip"
               },
               "Handler": "dist/lambda.handler",
               "Runtime": "nodejs18.x",
-              "FunctionName": "Loatodo-Boards-prod-api",
+              "FunctionName": "Loatodo-Backend-NestJS-prod-api",
               "MemorySize": 512,
               "Timeout": 900,
               "Environment": {
@@ -131,20 +131,20 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionNd9F6UmVxV6MahIT5DHQUVjQWZGtVKGej6BFc3IGTyE": {
+          "ApiLambdaVersionzKTRQd4mxnMMXCPgMpHS4Iz1noosXx1Vkpkhsj2Rk": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "Rc311E644561x2lP5ZOElBlavNn/tRv/dawCPv1vJ/U="
+              "CodeSha256": "rK+ovVnMR/o5jLDmVuk+sv4UBwh1DOO95+3lnfn+6h8="
             }
           },
           "ApiGatewayRestApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-              "Name": "prod-Loatodo-Boards",
+              "Name": "prod-Loatodo-Backend-NestJS",
               "EndpointConfiguration": {
                 "Types": [
                   "EDGE"
@@ -263,7 +263,7 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1728229295626": {
+          "ApiGatewayDeployment1728253634193": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -318,16 +318,16 @@
           "ServerlessDeploymentBucketName": {
             "Value": "serverless-framework-deployments-ap-northeast-2-b20fea30-80e4",
             "Export": {
-              "Name": "sls-Loatodo-Boards-prod-ServerlessDeploymentBucketName"
+              "Name": "sls-Loatodo-Backend-NestJS-prod-ServerlessDeploymentBucketName"
             }
           },
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionNd9F6UmVxV6MahIT5DHQUVjQWZGtVKGej6BFc3IGTyE"
+              "Ref": "ApiLambdaVersionzKTRQd4mxnMMXCPgMpHS4Iz1noosXx1Vkpkhsj2Rk"
             },
             "Export": {
-              "Name": "sls-Loatodo-Boards-prod-ApiLambdaFunctionQualifiedArn"
+              "Name": "sls-Loatodo-Backend-NestJS-prod-ApiLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -353,7 +353,7 @@
               ]
             },
             "Export": {
-              "Name": "sls-Loatodo-Boards-prod-ServiceEndpoint"
+              "Name": "sls-Loatodo-Backend-NestJS-prod-ServiceEndpoint"
             }
           }
         }
@@ -403,18 +403,18 @@
             }
           }
         ],
-        "name": "Loatodo-Boards-prod-api",
+        "name": "Loatodo-Backend-NestJS-prod-api",
         "memory": 512,
         "timeout": 900,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersionNd9F6UmVxV6MahIT5DHQUVjQWZGtVKGej6BFc3IGTyE"
+        "versionLogicalId": "ApiLambdaVersionzKTRQd4mxnMMXCPgMpHS4Iz1noosXx1Vkpkhsj2Rk"
       }
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yaml",
     "initialServerlessConfig": {
-      "service": "Loatodo-Boards",
+      "service": "Loatodo-Backend-NestJS",
       "package": {
         "patterns": [
           "!.git/**",
@@ -424,10 +424,10 @@
           "!node_modules/.cache/**",
           "!node_modules/aws-sdk/**"
         ],
-        "artifactsS3KeyDirname": "serverless/Loatodo-Boards/prod/code-artifacts",
+        "artifactsS3KeyDirname": "serverless/Loatodo-Backend-NestJS/prod/code-artifacts",
         "deploymentBucket": "serverless-framework-deployments-ap-northeast-2-b20fea30-80e4",
-        "artifact": "/Users/minhyeok/Desktop/LostarkTodo/nestjs/boards/.serverless/Loatodo-Boards.zip",
-        "artifactDirectoryName": "serverless/Loatodo-Boards/prod/1728229299875-2024-10-06T15:41:39.875Z"
+        "artifact": "/Users/minhyeok/Desktop/LostarkTodo/Backend-NestJS/.serverless/Loatodo-Backend-NestJS.zip",
+        "artifactDirectoryName": "serverless/Loatodo-Backend-NestJS/prod/1728253638762-2024-10-06T22:27:18.762Z"
       },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
@@ -440,10 +440,10 @@
     "appId": null,
     "orgId": null,
     "layers": {},
-    "artifact": "/Users/minhyeok/Desktop/LostarkTodo/nestjs/boards/.serverless/Loatodo-Boards.zip"
+    "artifact": "/Users/minhyeok/Desktop/LostarkTodo/Backend-NestJS/.serverless/Loatodo-Backend-NestJS.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/Loatodo-Boards/prod/1728229299875-2024-10-06T15:41:39.875Z",
-    "artifact": "Loatodo-Boards.zip"
+    "artifactDirectoryName": "serverless/Loatodo-Backend-NestJS/prod/1728253638762-2024-10-06T22:27:18.762Z",
+    "artifact": "Loatodo-Backend-NestJS.zip"
   }
 }
